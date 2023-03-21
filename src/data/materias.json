@@ -1,0 +1,380 @@
+[
+    {
+      "codigo": 0,
+      "materia": "Álgebra y Geometría Analítica I",
+      "correlativas": "",
+      "anio": "Primer Año",
+      "nivel": 0
+    },
+    {
+      "codigo": 1,
+      "materia": "Análisis Matemático I",
+      "correlativas": "",
+      "anio": "Primer Año",
+      "nivel": 0
+    },
+    {
+      "codigo": 2,
+      "materia": "Matemática Discreta",
+      "correlativas": "",
+      "anio": "Primer Año",
+      "nivel": 0
+    },
+    {
+      "codigo": 3,
+      "materia": "Programación Inicial",
+      "correlativas": "",
+      "anio": "Primer Año",
+      "nivel": 0
+    },
+    {
+      "codigo": 4,
+      "materia": "Introducción a los Sistemas de información",
+      "correlativas": "",
+      "anio": "Primer Año",
+      "nivel": 0
+    },
+    {
+      "codigo": 5,
+      "materia": "Sistemas de Numeración",
+      "correlativas": "",
+      "anio": "Primer Año",
+      "nivel": 0
+    },
+    {
+      "codigo": 6,
+      "materia": "Principios de Calidad de Software",
+      "correlativas": "",
+      "anio": "Primer Año",
+      "nivel": 1
+    },
+    {
+      "codigo": 7,
+      "materia": "Física I",
+      "correlativas": "1",
+      "anio": "Primer Año",
+      "nivel": 1
+    },
+    {
+      "codigo": 8,
+      "materia": "Programación Estructurada Básica",
+      "correlativas": "3",
+      "anio": "Primer Año",
+      "nivel": 1
+    },
+    {
+      "codigo": 9,
+      "materia": "Introducción a la Gestión de Requisitos",
+      "correlativas": "4",
+      "anio": "Primer Año",
+      "nivel": 1
+    },
+    {
+      "codigo": 10,
+      "materia": "Fundamentos de Sistemas Embebidos",
+      "correlativas": "5",
+      "anio": "Primer Año",
+      "nivel": 1
+    },
+    {
+      "codigo": 11,
+      "materia": "Introducción a los Proyectos Informáticos",
+      "correlativas": "",
+      "anio": "Primer Año",
+      "nivel": 1
+    },
+    {
+      "codigo": 12,
+      "materia": "Análisis Matemático II",
+      "correlativas": "1",
+      "anio": "Segundo Año",
+      "nivel": 2
+    },
+    {
+      "codigo": 13,
+      "materia": "Física II",
+      "correlativas": "7",
+      "anio": "Segundo Año",
+      "nivel": 2
+    },
+    {
+      "codigo": 14,
+      "materia": "Tópicos de Programación",
+      "correlativas": "2-8",
+      "anio": "Segundo Año",
+      "nivel": 2
+    },
+    {
+      "codigo": 15,
+      "materia": "Bases de Datos",
+      "correlativas": "2-8",
+      "anio": "Segundo Año",
+      "nivel": 2
+    },
+    {
+      "codigo": 16,
+      "materia": "Análisis de Sistemas",
+      "correlativas": "9",
+      "anio": "Segundo Año",
+      "nivel": 2
+    },
+    {
+      "codigo": 17,
+      "materia": "Arquitectura de Computadoras",
+      "correlativas": "10",
+      "anio": "Segundo Año",
+      "nivel": 2
+    },
+    {
+      "codigo": 18,
+      "materia": "Análisis Matemático III",
+      "correlativas": "12",
+      "anio": "Segundo Año",
+      "nivel": 3
+    },
+    {
+      "codigo": 19,
+      "materia": "Algoritmos y Estructuras de Datos",
+      "correlativas": "14",
+      "anio": "Segundo Año",
+      "nivel": 3
+    },
+    {
+      "codigo": 20,
+      "materia": "Bases de Datos Aplicada",
+      "correlativas": "15",
+      "anio": "Segundo Año",
+      "nivel": 3
+    },
+    {
+      "codigo": 21,
+      "materia": "Principios de Diseño de Sistemas",
+      "correlativas": "6-16",
+      "anio": "Segundo Año",
+      "nivel": 3
+    },
+    {
+      "codigo": 22,
+      "materia": "Redes de Computadoras",
+      "correlativas": "13-17",
+      "anio": "Segundo Año",
+      "nivel": 3
+    },
+    {
+      "codigo": 23,
+      "materia": "Gestión de las Organizaciones",
+      "correlativas": "11",
+      "anio": "Segundo Año",
+      "nivel": 3
+    },
+    {
+      "codigo": 24,
+      "materia": "Álgebra y Geometría Analítica II",
+      "correlativas": "0",
+      "anio": "Tercer Año",
+      "nivel": 4
+    },
+    {
+      "codigo": 25,
+      "materia": "Paradigmas de Programación",
+      "correlativas": "12-19",
+      "anio": "Tercer Año",
+      "nivel": 4
+    },
+    {
+      "codigo": 26,
+      "materia": "Requisitos Avanzados",
+      "correlativas": "21",
+      "anio": "Tercer Año",
+      "nivel": 4
+    },
+    {
+      "codigo": 27,
+      "materia": "Diseño de Software",
+      "correlativas": "15-21",
+      "anio": "Tercer Año",
+      "nivel": 4
+    },
+    {
+      "codigo": 28,
+      "materia": "Sistemas Operativos",
+      "correlativas": "17",
+      "anio": "Tercer Año",
+      "nivel": 4
+    },
+    {
+      "codigo": 29,
+      "materia": "Seguridad de la Información",
+      "correlativas": "14-17-22",
+      "anio": "Tercer Año",
+      "nivel": 4
+    },
+    {
+      "codigo": 30,
+      "materia": "Probabilidad y Estadística",
+      "correlativas": "2-18-24",
+      "anio": "Tercer Año",
+      "nivel": 5
+    },
+    {
+      "codigo": 31,
+      "materia": "Programación Avanzada",
+      "correlativas": "20-25",
+      "anio": "Tercer Año",
+      "nivel": 5
+    },
+    {
+      "codigo": 32,
+      "materia": "Arquitecturas de Sistemas Software",
+      "correlativas": "27",
+      "anio": "Tercer Año",
+      "nivel": 5
+    },
+    {
+      "codigo": 33,
+      "materia": "Virtualización de Hardware",
+      "correlativas": "19-24-28",
+      "anio": "Tercer Año",
+      "nivel": 5
+    },
+    {
+      "codigo": 34,
+      "materia": "Auditoría y Legislación",
+      "correlativas": "29",
+      "anio": "Tercer Año",
+      "nivel": 5
+    },
+    {
+      "codigo": 35,
+      "materia": "Estadística Aplicada",
+      "correlativas": "20-30",
+      "anio": "Cuarto Año",
+      "nivel": 6
+    },
+    {
+      "codigo": 36,
+      "materia": "Autómatas y Gramática",
+      "correlativas": "25",
+      "anio": "Cuarto Año",
+      "nivel": 6
+    },
+    {
+      "codigo": 37,
+      "materia": "Programación Concurrente",
+      "correlativas": "25-33",
+      "anio": "Cuarto Año",
+      "nivel": 6
+    },
+    {
+      "codigo": 38,
+      "materia": "Gestión Aplicada al Desarrollo de Software I",
+      "correlativas": "23-26-32",
+      "anio": "Cuarto Año",
+      "nivel": 6
+    },
+    {
+      "codigo": 39,
+      "materia": "Sistemas Operativos Avanzados",
+      "correlativas": "33",
+      "anio": "Cuarto Año",
+      "nivel": 6
+    },
+    {
+      "codigo": 40,
+      "materia": "Gestión de Proyectos",
+      "correlativas": "23-29-30",
+      "anio": "Cuarto Año",
+      "nivel": 6
+    },
+    {
+      "codigo": 41,
+      "materia": "Matemática Aplicada",
+      "correlativas": "30",
+      "anio": "Cuarto Año",
+      "nivel": 7
+    },
+    {
+      "codigo": 42,
+      "materia": "Lenguajes y Compiladores",
+      "correlativas": "36",
+      "anio": "Cuarto Año",
+      "nivel": 7
+    },
+    {
+      "codigo": 43,
+      "materia": "Inteligencia Artificial",
+      "correlativas": "25-30",
+      "anio": "Cuarto Año",
+      "nivel": 7
+    },
+    {
+      "codigo": 44,
+      "materia": "Gestión Aplicada al Desarrollo de Software II",
+      "correlativas": "31-38",
+      "anio": "Cuarto Año",
+      "nivel": 7
+    },
+    {
+      "codigo": 45,
+      "materia": "Seguridad Aplicada y Forensia",
+      "correlativas": "28-31-34",
+      "anio": "Cuarto Año",
+      "nivel": 7
+    },
+    {
+      "codigo": 46,
+      "materia": "Gestión de la Calidad en Procesos de Sistemas",
+      "correlativas": "26",
+      "anio": "Cuarto Año",
+      "nivel": 7
+    },
+    {
+      "codigo": 47,
+      "materia": "Inteligencia Artificial Aplicada",
+      "correlativas": "35-43",
+      "anio": "Quinto Año",
+      "nivel": 8
+    },
+    {
+      "codigo": 48,
+      "materia": "Ciencia de datos",
+      "correlativas": "35-43",
+      "anio": "Quinto Año",
+      "nivel": 8
+    },
+    {
+      "codigo": 49,
+      "materia": "Innovación y Emprendedorismo",
+      "correlativas": "40",
+      "anio": "Quinto Año",
+      "nivel": 8
+    },
+    {
+      "codigo": 50,
+      "materia": "Proyecto Final de Carrera",
+      "correlativas": "35-38-39-40-46",
+      "anio": "Quinto Año",
+      "nivel": 8
+    },
+    {
+      "codigo": 51,
+      "materia": "Electiva I",
+      "correlativas": "37-40-42",
+      "anio": "Quinto Año",
+      "nivel": 8
+    },
+    {
+      "codigo": 52,
+      "materia": "Electiva II",
+      "correlativas": "41-45",
+      "anio": "Quinto Año",
+      "nivel": 9
+    },
+    {
+      "codigo": 53,
+      "materia": "Electiva III",
+      "correlativas": "43-44",
+      "anio": "Quinto Año",
+      "nivel": 9
+    }
+   ]

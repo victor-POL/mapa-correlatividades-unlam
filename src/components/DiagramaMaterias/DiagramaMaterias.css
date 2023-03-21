@@ -1,0 +1,14 @@
+.diagrama-react {
+  margin: 10px;
+  border: 5px white solid;
+  width: 100vw;
+  height: 100vh;
+}
+
+.react-flow__handle {
+  opacity: 0;
+}
+
+.normal-edge {
+  stroke: #ff009d;
+}

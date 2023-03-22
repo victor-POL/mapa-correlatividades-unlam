@@ -1,19 +1,54 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 
-import ReactFlow, { Controls, useNodesState, useEdgesState } from "reactflow";
+import diagramaOriginal from "../../data/diagrama-original.json";
+
+import ReactFlow, {
+  ReactFlowProvider,
+  Controls,
+  useNodesState,
+  useEdgesState,
+  useReactFlow,
+} from "reactflow";
 
 import "reactflow/dist/style.css";
 import "./DiagramaMaterias.css";
 import { cargarMaterias } from "../../services/CargaInfoMaterias";
 
-export default function DiagramaReact() {
-  const { initialNodes, initialEdges } = cargarMaterias();
+const flowKey = "diagrama-modificado";
+const { initialNodes, initialEdges } = cargarMaterias();
 
+const SaveRestore = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const [modoEdicion, setModoEdicion] = React.useState(false);
-  const [modoResaltado, setModoResaltado] = React.useState(false);
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [modoResaltado, setModoResaltado] = useState(false);
+
+  // Guardar diagrama en local storage
+  const [rfInstance, setRfInstance] = useState(null);
+  const { setViewport } = useReactFlow();
+
+  const onSave = useCallback(() => {
+    if (rfInstance) {
+      const flow = rfInstance.toObject();
+      localStorage.setItem(flowKey, JSON.stringify(flow));
+    }
+  }, [rfInstance]);
+
+  const onRestore = useCallback(() => {
+    const restoreFlow = async () => {
+      const flow = JSON.parse(localStorage.getItem(flowKey));
+
+      if (flow) {
+        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+        setNodes(flow.nodes || []);
+        setEdges(flow.edges || []);
+        setViewport({ x, y, zoom });
+      }
+    };
+
+    restoreFlow();
+  }, [setNodes, setViewport]);
 
   //   Esconder nodos
 
@@ -28,7 +63,16 @@ export default function DiagramaReact() {
     setModoEdicion(false);
     setModoResaltado(false);
 
-    setNodes((listaNodos) =>
+    const flow = diagramaOriginal;
+
+    if (flow) {
+      const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+      setNodes(flow.nodes || []);
+      setEdges(flow.edges || []);
+      setViewport({ x, y, zoom });
+    }
+
+    /* setNodes((listaNodos) =>
       listaNodos.map((nodoActual) => {
         nodoActual.hidden = false;
         nodoActual.style = { background: nodoActual.data.color };
@@ -46,27 +90,19 @@ export default function DiagramaReact() {
         aristaActual.data.isSelected = false;
         return aristaActual;
       })
-    );
+    ); */
   }
 
   function resaltarMateria(idMateriaAResaltar) {
     setNodes((listaNodos) =>
       listaNodos.map((nodoActual) => {
         if (nodoActual.id === idMateriaAResaltar) {
-          nodoActual.style = {
-            background: nodoActual.data.color,
-          };
-          nodoActual.data.isSelected = true;
+          nodoActual.data.isSelected = !nodoActual.data.isSelected;
+        }
+        if (nodoActual.data.isSelected) {
+          nodoActual.style = { background: nodoActual.data.color };
         } else {
-          if (nodoActual.data.isSelected === true) {
-            nodoActual.style = {
-              background: nodoActual.data.color,
-            };
-          } else {
-            nodoActual.style = {
-              background: "#B9B9B9",
-            };
-          }
+          nodoActual.style = { background: "#B9B9B9" };
         }
         return nodoActual;
       })
@@ -75,18 +111,22 @@ export default function DiagramaReact() {
     setEdges((listaAristas) =>
       listaAristas.map((aristaActual) => {
         if (
-          aristaActual.source === idMateriaAResaltar ||
-          aristaActual.target === idMateriaAResaltar
+          aristaActual.source === idMateriaAResaltar /* ||
+          aristaActual.target === idMateriaAResaltar */
         ) {
-          aristaActual.animated = true;
-          aristaActual.style = {
-            stroke: nodes[idMateriaAResaltar].style.background,
-          };
-          aristaActual.zIndex = 1;
+          if (nodes[idMateriaAResaltar].data.isSelected) {
+            aristaActual.style = { stroke: aristaActual.data.color };
+            aristaActual.animated = true;
+            aristaActual.data.isSelected = true;
+          } else {
+            aristaActual.style = { stroke: "#B9B9B9" };
+            aristaActual.animated = false;
+            aristaActual.data.isSelected = false;
+          }
         } else {
-          aristaActual.style = {
-            stroke: "#B9B9B9",
-          };
+          if (aristaActual.data.isSelected)
+            aristaActual.style = { stroke: aristaActual.data.color };
+          else aristaActual.style = { stroke: "#B9B9B9" };
         }
         return aristaActual;
       })
@@ -122,7 +162,19 @@ export default function DiagramaReact() {
         type="button"
         onClick={() => restaurarDiagrama()}
         className="react-flow__ishidden"
-        value="Restaurar Diagrama"
+        value="Inicio"
+      />
+      <input
+        type="button"
+        onClick={onSave}
+        className="react-flow__ishidden"
+        value="Guardar"
+      />
+      <input
+        type="button"
+        onClick={onRestore}
+        className="react-flow__ishidden"
+        value="Restaurar"
       />
       <input
         type="button"
@@ -162,9 +214,20 @@ export default function DiagramaReact() {
         onNodeClick={(_, node) => {
           if (modoResaltado) resaltarMateria(node.id);
         }}
+        onInit={setRfInstance}
       >
         <Controls />
       </ReactFlow>
     </div>
   );
+};
+
+function DiagramaMaterias() {
+  return (
+    <ReactFlowProvider>
+      <SaveRestore />
+    </ReactFlowProvider>
+  );
 }
+
+export default DiagramaMaterias;

@@ -1,5 +1,5 @@
 import data from "../data/materias.json";
-import { MarkerType, Position } from "reactflow";
+import { MarkerType } from "reactflow";
 
 export function cargarMaterias() {
   let y = -160;
@@ -10,7 +10,7 @@ export function cargarMaterias() {
   let materiasCorrelativas = {};
   let initialEdges = [];
   const coloresPorAnio = {
-    "Primer Año": "#FFFF00",
+    "Primer Año": "#FF0000",
     "Segundo Año": "#00FFFF",
     "Tercer Año": "#FF00FF",
     "Cuarto Año": "#80FF00",
@@ -41,55 +41,27 @@ export function cargarMaterias() {
         id: "e" + codCorrelativa + "-" + materia.codigo,
         source: codCorrelativa,
         target: materia.codigo.toString(),
+        data: { color: colorActual },
         type: "straight",
         markerEnd: {
           type: MarkerType.ArrowClosed,
         },
-        style: { stroke: coloresPorAnio[materia.anio] },
+        style: { stroke: colorActual },
       });
     });
 
     return {
       id: materia.codigo.toString(),
       position: { x: x, y: y },
-      data: { label: materia.materia },
+      data: { label: materia.materia, color: colorActual, isSelected: false },
       sourcePosition: "right",
       targetPosition: "left",
       style: {
         background: colorActual,
       },
-      connectable: false,
       hidden: false,
     };
   });
 
-  initialNodes.push(
-    {
-      id: "horizontal-1",
-      sourcePosition: "right",
-      targetPosition: "left",
-      type: "input",
-      data: { label: "Input" },
-      position: { x: 0, y: 1400 },
-    },
-    {
-      id: "horizontal-2",
-      sourcePosition: "right",
-      targetPosition: "left",
-      data: { label: "A Node" },
-      position: { x: 200, y: 1400 },
-    }
-  );
-
-  initialEdges.push({
-    id: "horizontal-e1-2",
-    source: "horizontal-1",
-    type: "smoothstep",
-    target: "horizontal-2",
-    animated: true,
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-    },
-  });
   return { initialNodes, initialEdges };
 }

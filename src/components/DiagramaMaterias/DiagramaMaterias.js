@@ -1,11 +1,6 @@
 import React from "react";
 
-import ReactFlow, {
-  Controls,
-  Background,
-  useNodesState,
-  useEdgesState,
-} from "reactflow";
+import ReactFlow, { Controls, useNodesState, useEdgesState } from "reactflow";
 
 import "reactflow/dist/style.css";
 import "./DiagramaMaterias.css";
@@ -17,6 +12,9 @@ export default function DiagramaReact() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  const [modoEdicion, setModoEdicion] = React.useState(false);
+  const [modoResaltado, setModoResaltado] = React.useState(false);
+
   //   Esconder nodos
 
   const hide = (hidden) => (nodeOrEdge) => {
@@ -26,20 +24,69 @@ export default function DiagramaReact() {
 
   //   Mostrar todos los nodos
 
-  function mostrarNodos() {
-    setNodes((nds) => nds.map(hide(false)));
-    setEdges((eds) => eds.map(hide(false)));
+  function restaurarDiagrama() {
+    setModoEdicion(false);
+    setModoResaltado(false);
+
+    setNodes((listaNodos) =>
+      listaNodos.map((nodoActual) => {
+        nodoActual.hidden = false;
+        nodoActual.style = { background: nodoActual.data.color };
+        nodoActual.zIndex = 0;
+        nodoActual.data.isSelected = false;
+        return nodoActual;
+      })
+    );
+    setEdges((listaAristas) =>
+      listaAristas.map((aristaActual) => {
+        aristaActual.hidden = false;
+        aristaActual.style = { stroke: aristaActual.data.color };
+        aristaActual.animated = false;
+        aristaActual.zIndex = 0;
+        aristaActual.data.isSelected = false;
+        return aristaActual;
+      })
+    );
   }
 
-  function resaltar(idNodoABuscar) {
-    setEdges((eds) =>
-      eds.map((aristaActual) => {
+  function resaltarMateria(idMateriaAResaltar) {
+    setNodes((listaNodos) =>
+      listaNodos.map((nodoActual) => {
+        if (nodoActual.id === idMateriaAResaltar) {
+          nodoActual.style = {
+            background: nodoActual.data.color,
+          };
+          nodoActual.data.isSelected = true;
+        } else {
+          if (nodoActual.data.isSelected === true) {
+            nodoActual.style = {
+              background: nodoActual.data.color,
+            };
+          } else {
+            nodoActual.style = {
+              background: "#B9B9B9",
+            };
+          }
+        }
+        return nodoActual;
+      })
+    );
+
+    setEdges((listaAristas) =>
+      listaAristas.map((aristaActual) => {
         if (
-          aristaActual.source === idNodoABuscar ||
-          aristaActual.target === idNodoABuscar
+          aristaActual.source === idMateriaAResaltar ||
+          aristaActual.target === idMateriaAResaltar
         ) {
-          // aristaActual.hidden = true;
-          aristaActual.className = "normal-edge";
+          aristaActual.animated = true;
+          aristaActual.style = {
+            stroke: nodes[idMateriaAResaltar].style.background,
+          };
+          aristaActual.zIndex = 1;
+        } else {
+          aristaActual.style = {
+            stroke: "#B9B9B9",
+          };
         }
         return aristaActual;
       })
@@ -56,6 +103,7 @@ export default function DiagramaReact() {
           : nodoActual
       )
     );
+    // Ocultar aristas entrantes y salientes
     setEdges((listaAristas) =>
       listaAristas.map((aristaActual) =>
         aristaActual.source === idMateriaAOcultar ||
@@ -72,22 +120,50 @@ export default function DiagramaReact() {
     <div className="diagrama-react">
       <input
         type="button"
-        onClick={() => mostrarNodos()}
+        onClick={() => restaurarDiagrama()}
         className="react-flow__ishidden"
-        value="Mostrar todo"
+        value="Restaurar Diagrama"
+      />
+      <input
+        type="button"
+        onClick={() => {
+          setModoEdicion(!modoEdicion);
+          setModoResaltado(false);
+        }}
+        value={
+          modoEdicion
+            ? "Cambiar a Modo visualización"
+            : "Cambiar a Modo edición"
+        }
+      />
+      <input
+        type="button"
+        onClick={() => {
+          setModoResaltado(!modoResaltado);
+          setModoEdicion(false);
+        }}
+        value={
+          modoResaltado
+            ? "Cambiar a Modo visualización"
+            : "Cambiar a Modo resaltado"
+        }
       />
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        nodesConnectable={false}
+        elementsSelectable={false}
+        zoomOnDoubleClick={false}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onNodeDoubleClick={(event, node) => {
-          ocultarMateria(node.id);
+        onNodeDoubleClick={(_, node) => {
+          if (modoEdicion) ocultarMateria(node.id);
         }}
-        onNodeClick={(event, node) => resaltar(node.id)}
+        onNodeClick={(_, node) => {
+          if (modoResaltado) resaltarMateria(node.id);
+        }}
       >
         <Controls />
-        <Background variant="dots" gap={12} size={1} />
       </ReactFlow>
     </div>
   );

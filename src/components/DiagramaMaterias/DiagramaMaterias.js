@@ -36,6 +36,13 @@ const Diagrama = () => {
     }
   }, [rfInstance]);
 
+  const onSave2 = useCallback(() => {
+    if (rfInstance) {
+      const flow = rfInstance.toObject();
+      localStorage.setItem("original-diagram", JSON.stringify(flow));
+    }
+  }, [rfInstance]);
+
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flow = JSON.parse(localStorage.getItem(flowKey));
@@ -106,7 +113,13 @@ const Diagrama = () => {
             };
             nodoActual.zIndex = 1;
           } else {
-            nodoActual.style = { background: "#B9B9B9" };
+            if (nodoActual.data.estaCursable) {
+              nodoActual.style = {
+                background: nodoActual.data.colorCursable,
+              };
+            } else {
+              nodoActual.style = { background: "#B9B9B9" };
+            }
             nodoActual.zIndex = 0;
           }
         } else if (nodoActual.data.correlativas.includes(idMateriaAResaltar)) {
@@ -115,15 +128,18 @@ const Diagrama = () => {
               (correlativa) => nodes[correlativa].data.estaAprobada
             )
           ) {
-            nodoActual.data.estaAprobada = true;
-            nodoActual.style = {
-              background: nodoActual.data.colorCursable,
-            };
+            nodoActual.data.estaCursable = true;
+            if (!nodoActual.data.estaAprobada) {
+              nodoActual.style = {
+                background: nodoActual.data.colorCursable,
+              };
+            }
           } else if (
             !nodes[idMateriaAResaltar].data.estaAprobada &&
-            nodoActual.data.estaAprobada
+            (nodoActual.data.estaAprobada || nodoActual.data.estaCursable)
           ) {
             nodoActual.data.estaAprobada = false;
+            nodoActual.data.estaCursable = false;
             nodoActual.style = { background: "#B9B9B9" };
           }
         }
@@ -137,22 +153,38 @@ const Diagrama = () => {
       listaAristas.map((aristaActual) => {
         if (
           aristaActual.source === idMateriaAResaltar ||
-          nodes[Number(aristaActual.source)].data.estaAprobada
+          nodes[Number(aristaActual.source)].data.estaAprobada ||
+          nodes[Number(aristaActual.source)].data.estaCursable
         ) {
-          if (
-            nodes[idMateriaAResaltar].data.estaAprobada ||
-            nodes[Number(aristaActual.source)].data.estaAprobada
-          ) {
+          if (aristaActual.source == 29)
+            console.log("Arista " + aristaActual.id);
+          if (nodes[Number(aristaActual.source)].data.estaAprobada) {
+            if (
+              aristaActual.source == 29 &&
+              nodes[idMateriaAResaltar].data.estaAprobada
+            )
+              console.log("1");
             aristaActual.style = { stroke: aristaActual.data.colorAprobado };
             aristaActual.animated = true;
             aristaActual.data.estaAprobada = true;
             aristaActual.zIndex = 1;
           } else {
-            aristaActual.style = { stroke: "#B9B9B9" };
-            aristaActual.animated = false;
-            aristaActual.data.estaAprobada = false;
-            aristaActual.zIndex = 0;
+            if (aristaActual.source == 29) console.log("2");
+            if (!nodes[Number(aristaActual.source)].data.estaCursable) {
+              if (aristaActual.source == 29) console.log("3");
+              aristaActual.style = { stroke: "#B9B9B9" };
+              aristaActual.animated = false;
+              aristaActual.data.estaAprobada = false;
+              aristaActual.zIndex = 0;
+            }
           }
+        } else if (
+          !nodes[Number(aristaActual.source)].data.estaCursable &&
+          !nodes[Number(aristaActual.source)].data.estaAprobada
+        ) {
+          if (aristaActual.source == 22) console.log("4");
+          aristaActual.style = { stroke: "#B9B9B9" };
+          aristaActual.animated = false;
         }
         return aristaActual;
       })

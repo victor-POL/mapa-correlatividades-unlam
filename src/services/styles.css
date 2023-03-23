@@ -1,0 +1,14 @@
+@keyframes mover-puntos {
+  0% {
+    border-bottom-width: 2px;
+    border-top-width: 2px;
+  }
+  50% {
+    border-bottom-width: 6px;
+    border-top-width: 6px;
+  }
+  100% {
+    border-bottom-width: 2px;
+    border-top-width: 2px;
+  }
+}

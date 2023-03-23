@@ -17,12 +17,13 @@ import { cargarMaterias } from "../../services/CargaInfoMaterias";
 const flowKey = "diagrama-modificado";
 const { initialNodes, initialEdges } = cargarMaterias();
 
-const SaveRestore = () => {
+const Diagrama = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const [modoEdicion, setModoEdicion] = useState(false);
   const [modoResaltado, setModoResaltado] = useState(false);
+  const [seActivoModoResaltado, setSeActivoModoResaltado] = useState(false);
 
   // Guardar diagrama en local storage
   const [rfInstance, setRfInstance] = useState(null);
@@ -71,62 +72,87 @@ const SaveRestore = () => {
       setEdges(flow.edges || []);
       setViewport({ x, y, zoom });
     }
+  }
 
-    /* setNodes((listaNodos) =>
-      listaNodos.map((nodoActual) => {
-        nodoActual.hidden = false;
-        nodoActual.style = { background: nodoActual.data.color };
-        nodoActual.zIndex = 0;
-        nodoActual.data.isSelected = false;
-        return nodoActual;
-      })
-    );
-    setEdges((listaAristas) =>
-      listaAristas.map((aristaActual) => {
-        aristaActual.hidden = false;
-        aristaActual.style = { stroke: aristaActual.data.color };
-        aristaActual.animated = false;
-        aristaActual.zIndex = 0;
-        aristaActual.data.isSelected = false;
-        return aristaActual;
-      })
-    ); */
+  function setearNodosAristasEdicion() {
+    if (!seActivoModoResaltado) {
+      setSeActivoModoResaltado(true);
+      setNodes((listaNodos) =>
+        listaNodos.map((nodoActual) => {
+          nodoActual.style = { background: "#B9B9B9" };
+          return nodoActual;
+        })
+      );
+
+      setEdges((listaAristas) =>
+        listaAristas.map((aristaActual) => {
+          aristaActual.style = { stroke: "#B9B9B9" };
+          return aristaActual;
+        })
+      );
+    }
   }
 
   function resaltarMateria(idMateriaAResaltar) {
+    // Resaltar nodo
     setNodes((listaNodos) =>
       listaNodos.map((nodoActual) => {
         if (nodoActual.id === idMateriaAResaltar) {
-          nodoActual.data.isSelected = !nodoActual.data.isSelected;
+          nodoActual.data.estaAprobada = !nodoActual.data.estaAprobada;
+          if (nodoActual.data.estaAprobada) {
+            nodoActual.style = {
+              background: nodoActual.data.colorAprobado,
+              fontWeight: "bold",
+            };
+            nodoActual.zIndex = 1;
+          } else {
+            nodoActual.style = { background: "#B9B9B9" };
+            nodoActual.zIndex = 0;
+          }
+        } else if (nodoActual.data.correlativas.includes(idMateriaAResaltar)) {
+          if (
+            nodoActual.data.correlativas.every(
+              (correlativa) => nodes[correlativa].data.estaAprobada
+            )
+          ) {
+            nodoActual.data.estaAprobada = true;
+            nodoActual.style = {
+              background: nodoActual.data.colorCursable,
+            };
+          } else if (
+            !nodes[idMateriaAResaltar].data.estaAprobada &&
+            nodoActual.data.estaAprobada
+          ) {
+            nodoActual.data.estaAprobada = false;
+            nodoActual.style = { background: "#B9B9B9" };
+          }
         }
-        if (nodoActual.data.isSelected) {
-          nodoActual.style = { background: nodoActual.data.color };
-        } else {
-          nodoActual.style = { background: "#B9B9B9" };
-        }
+
         return nodoActual;
       })
     );
 
+    // Resaltar aristas salientes
     setEdges((listaAristas) =>
       listaAristas.map((aristaActual) => {
         if (
-          aristaActual.source === idMateriaAResaltar /* ||
-          aristaActual.target === idMateriaAResaltar */
+          aristaActual.source === idMateriaAResaltar ||
+          nodes[Number(aristaActual.source)].data.estaAprobada
         ) {
-          if (nodes[idMateriaAResaltar].data.isSelected) {
-            aristaActual.style = { stroke: aristaActual.data.color };
+          if (
+            nodes[idMateriaAResaltar].data.estaAprobada ||
+            nodes[Number(aristaActual.source)].data.estaAprobada
+          ) {
+            aristaActual.style = { stroke: aristaActual.data.colorAprobado };
             aristaActual.animated = true;
-            aristaActual.data.isSelected = true;
+            aristaActual.data.estaAprobada = true;
+            aristaActual.zIndex = 1;
           } else {
             aristaActual.style = { stroke: "#B9B9B9" };
             aristaActual.animated = false;
-            aristaActual.data.isSelected = false;
+            aristaActual.data.estaAprobada = false;
+            aristaActual.zIndex = 0;
           }
-        } else {
-          if (aristaActual.data.isSelected)
-            aristaActual.style = { stroke: aristaActual.data.color };
-          else aristaActual.style = { stroke: "#B9B9B9" };
         }
         return aristaActual;
       })
@@ -191,6 +217,7 @@ const SaveRestore = () => {
       <input
         type="button"
         onClick={() => {
+          setearNodosAristasEdicion();
           setModoResaltado(!modoResaltado);
           setModoEdicion(false);
         }}
@@ -225,7 +252,7 @@ const SaveRestore = () => {
 function DiagramaMaterias() {
   return (
     <ReactFlowProvider>
-      <SaveRestore />
+      <Diagrama />
     </ReactFlowProvider>
   );
 }

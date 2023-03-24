@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/mapa-correlatividades-unlam/static/css/main.643beefe.css",
+    "main.js": "/mapa-correlatividades-unlam/static/js/main.125c3960.js",
+    "index.html": "/mapa-correlatividades-unlam/index.html",
+    "main.643beefe.css.map": "/mapa-correlatividades-unlam/static/css/main.643beefe.css.map",
+    "main.125c3960.js.map": "/mapa-correlatividades-unlam/static/js/main.125c3960.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.643beefe.css",
+    "static/js/main.125c3960.js"
+  ]
+}

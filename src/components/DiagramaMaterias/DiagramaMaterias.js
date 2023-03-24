@@ -7,7 +7,6 @@ import ReactFlow, {
   Controls,
   useNodesState,
   useEdgesState,
-  useReactFlow,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -27,7 +26,6 @@ const Diagrama = () => {
 
   // Guardar diagrama en local storage
   const [rfInstance, setRfInstance] = useState(null);
-  const { setViewport } = useReactFlow();
 
   const onSave = useCallback(() => {
     if (rfInstance) {
@@ -36,27 +34,18 @@ const Diagrama = () => {
     }
   }, [rfInstance]);
 
-  const onSave2 = useCallback(() => {
-    if (rfInstance) {
-      const flow = rfInstance.toObject();
-      localStorage.setItem("original-diagram", JSON.stringify(flow));
-    }
-  }, [rfInstance]);
-
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       const flow = JSON.parse(localStorage.getItem(flowKey));
 
       if (flow) {
-        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
         setNodes(flow.nodes || []);
         setEdges(flow.edges || []);
-        setViewport({ x, y, zoom });
       }
     };
 
     restoreFlow();
-  }, [setNodes, setViewport]);
+  }, [setNodes, setEdges]);
 
   //   Esconder nodos
 
@@ -74,10 +63,8 @@ const Diagrama = () => {
     const flow = diagramaOriginal;
 
     if (flow) {
-      const { x = 0, y = 0, zoom = 1 } = flow.viewport;
       setNodes(flow.nodes || []);
       setEdges(flow.edges || []);
-      setViewport({ x, y, zoom });
     }
   }
 
@@ -85,9 +72,9 @@ const Diagrama = () => {
     if (!seActivoModoResaltado) {
       setSeActivoModoResaltado(true);
       setNodes((listaNodos) =>
-        listaNodos.map((nodoActual) => {
-          nodoActual.style = { background: "#B9B9B9" };
-          return nodoActual;
+        listaNodos.map((nodo) => {
+          nodo.style = { background: "#B9B9B9" };
+          return nodo;
         })
       );
 
@@ -103,102 +90,68 @@ const Diagrama = () => {
   function resaltarMateria(idMateriaAResaltar) {
     // Resaltar nodo
     setNodes((listaNodos) =>
-      listaNodos.map((nodoActual) => {
-        if (nodoActual.id === idMateriaAResaltar) {
-          nodoActual.data.estaAprobada = !nodoActual.data.estaAprobada;
-          if (nodoActual.data.estaAprobada) {
-            nodoActual.style = {
-              background: nodoActual.data.colorAprobado,
-              fontWeight: "bold",
-            };
-            nodoActual.zIndex = 1;
+      listaNodos.map((nodo) => {
+        if (nodo.id === idMateriaAResaltar) {
+          nodo.data.estaAprobada = !nodo.data.estaAprobada;
+          if (nodo.data.estaAprobada) {
+            nodo.style = { background: nodo.data.colorAprobado };
+            nodo.zIndex = 1;
+          } else if (nodo.data.estaCursable) {
+            nodo.style = { background: nodo.data.colorCursable };
+            nodo.zIndex = 1;
           } else {
-            if (nodoActual.data.estaCursable) {
-              nodoActual.style = {
-                background: nodoActual.data.colorCursable,
-              };
-            } else {
-              nodoActual.style = { background: "#B9B9B9" };
-            }
-            nodoActual.zIndex = 0;
+            nodo.style = { background: "#B9B9B9" };
+            nodo.zIndex = 0;
           }
-        } else if (nodoActual.data.correlativas.includes(idMateriaAResaltar)) {
-          if (
-            nodoActual.data.correlativas.every(
-              (correlativa) => nodes[correlativa].data.estaAprobada
-            )
-          ) {
-            nodoActual.data.estaCursable = true;
-            if (!nodoActual.data.estaAprobada) {
-              nodoActual.style = {
-                background: nodoActual.data.colorCursable,
-              };
-            }
-          } else if (
-            !nodes[idMateriaAResaltar].data.estaAprobada &&
-            (nodoActual.data.estaAprobada || nodoActual.data.estaCursable)
-          ) {
-            nodoActual.data.estaAprobada = false;
-            nodoActual.data.estaCursable = false;
-            nodoActual.style = { background: "#B9B9B9" };
+        } else if (nodo.data.correlativas.includes(idMateriaAResaltar)) {
+          const susCorrelativasEstanAprobadas = nodo.data.correlativas.every(
+            (correlativa) =>
+              nodes[correlativa].data.estaAprobada && !nodo.data.estaAprobada
+          );
+          if (susCorrelativasEstanAprobadas) {
+            nodo.data.estaCursable = true;
+            nodo.style = { background: nodo.data.colorCursable };
+            nodo.zIndex = 1;
+          } else if (!nodo.data.estaAprobada && nodo.data.estaCursable) {
+            nodo.data.estaCursable = false;
+            nodo.style = { background: "#B9B9B9" };
+            nodo.zIndex = 0;
           }
         }
 
-        return nodoActual;
+        return nodo;
       })
     );
 
     // Resaltar aristas salientes
     setEdges((listaAristas) =>
       listaAristas.map((aristaActual) => {
-        if (
-          aristaActual.source === idMateriaAResaltar ||
-          nodes[Number(aristaActual.source)].data.estaAprobada ||
-          nodes[Number(aristaActual.source)].data.estaCursable
-        ) {
-          if (aristaActual.source == 29)
-            console.log("Arista " + aristaActual.id);
-          if (nodes[Number(aristaActual.source)].data.estaAprobada) {
-            if (
-              aristaActual.source == 29 &&
-              nodes[idMateriaAResaltar].data.estaAprobada
-            )
-              console.log("1");
-            aristaActual.style = { stroke: aristaActual.data.colorAprobado };
-            aristaActual.animated = true;
-            aristaActual.data.estaAprobada = true;
-            aristaActual.zIndex = 1;
-          } else {
-            if (aristaActual.source == 29) console.log("2");
-            if (!nodes[Number(aristaActual.source)].data.estaCursable) {
-              if (aristaActual.source == 29) console.log("3");
-              aristaActual.style = { stroke: "#B9B9B9" };
-              aristaActual.animated = false;
-              aristaActual.data.estaAprobada = false;
-              aristaActual.zIndex = 0;
-            }
-          }
-        } else if (
-          !nodes[Number(aristaActual.source)].data.estaCursable &&
-          !nodes[Number(aristaActual.source)].data.estaAprobada
-        ) {
-          if (aristaActual.source == 22) console.log("4");
-          aristaActual.style = { stroke: "#B9B9B9" };
+        if (nodes[Number(aristaActual.source)].data.estaAprobada) {
+          aristaActual.style = {
+            stroke: nodes[aristaActual.target].data.colorAprobado,
+          };
+          aristaActual.animated = true;
+          aristaActual.zIndex = 1;
+        } else {
+          aristaActual.style = {
+            stroke: "#B9B9B9",
+          };
           aristaActual.animated = false;
+          aristaActual.zIndex = 0;
         }
+
         return aristaActual;
       })
     );
+    console.log("==========================================");
   }
 
   //  Ocultar materia
   function ocultarMateria(idMateriaAOcultar) {
     // Ocultar nodo
     setNodes((listaNodos) =>
-      listaNodos.map((nodoActual) =>
-        nodoActual.id === idMateriaAOcultar
-          ? hide(true)(nodoActual)
-          : nodoActual
+      listaNodos.map((nodo) =>
+        nodo.id === idMateriaAOcultar ? hide(true)(nodo) : nodo
       )
     );
     // Ocultar aristas entrantes y salientes

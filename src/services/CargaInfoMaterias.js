@@ -51,7 +51,6 @@ export function cargarMaterias() {
         id: "e" + codCorrelativa + "-" + materia.codigo,
         source: codCorrelativa,
         target: materia.codigo.toString(),
-        data: { colorAprobado: colorActual, esCursable: false },
         type: "straight",
         markerEnd: {
           type: MarkerType.ArrowClosed,

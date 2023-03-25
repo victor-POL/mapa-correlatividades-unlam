@@ -5,6 +5,7 @@ import diagramaOriginal from "../../data/diagrama-original.json";
 import ReactFlow, {
   ReactFlowProvider,
   Controls,
+  ControlButton,
   useNodesState,
   useEdgesState,
 } from "reactflow";
@@ -143,7 +144,6 @@ const Diagrama = () => {
         return aristaActual;
       })
     );
-    console.log("==========================================");
   }
 
   //  Ocultar materia
@@ -175,18 +175,7 @@ const Diagrama = () => {
         className="react-flow__ishidden"
         value="Inicio"
       />
-      <input
-        type="button"
-        onClick={onSave}
-        className="react-flow__ishidden"
-        value="Guardar"
-      />
-      <input
-        type="button"
-        onClick={onRestore}
-        className="react-flow__ishidden"
-        value="Restaurar"
-      />
+
       <input
         type="button"
         onClick={() => {
@@ -228,7 +217,14 @@ const Diagrama = () => {
         }}
         onInit={setRfInstance}
       >
-        <Controls />
+        <Controls>
+          <ControlButton style={{ width: "auto" }} onClick={onSave}>
+            <div>Guardar</div>
+          </ControlButton>
+          <ControlButton style={{ width: "auto" }} onClick={onRestore}>
+            <div>Restaurar</div>
+          </ControlButton>
+        </Controls>
       </ReactFlow>
     </div>
   );
@@ -236,7 +232,7 @@ const Diagrama = () => {
 
 function DiagramaMaterias() {
   return (
-    <ReactFlowProvider>
+    <ReactFlowProvider className="diagrama-react">
       <Diagrama />
     </ReactFlowProvider>
   );

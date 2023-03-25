@@ -3,9 +3,9 @@ import DiagramaMaterias from "./components/DiagramaMaterias/DiagramaMaterias";
 
 function App() {
   return (
-    <div className="App">
-      <DiagramaMaterias />
-    </div>
+    <>
+      <DiagramaMaterias className="diagrama-react" />
+    </>
   );
 }
 

@@ -1,61 +1,53 @@
-import data from "../data/materias.json";
 import { MarkerType } from "reactflow";
-import "./styles.css";
+import data from "../data/materias.json";
+
+const coloresAprobadosPorAnio = [
+  "#e21d1d",
+  "#06b8f9",
+  "#08f728",
+  "#fbc704",
+  "#8f4ae8",
+];
+const coloresCursablesPorAnio = [
+  "#f08e8e",
+  "#83dcfc",
+  "#83fb93",
+  "#fde281",
+  "#b98ef0",
+];
 
 export function cargarMaterias() {
+  let anioAnterior = data[0].anio;
+  let cuatrimestreAnterior = data[0].cuatrimestre;
+
   let y = -160;
   let x = 0;
 
-  let anioActual = data[0].anio;
-  let nivelActual = data[0].nivel;
-  let materiasCorrelativas = {};
   let initialEdges = [];
-  const coloresPorAnio = {
-    "Primer Año": "#e21d1d",
-    "Segundo Año": "#06b8f9",
-    "Tercer Año": "#08f728",
-    "Cuarto Año": "#fbc704",
-    "Quinto Año": "#8f4ae8",
-  };
-  const coloresCursablesPorAnio = {
-    "Primer Año": "#f08e8e",
-    "Segundo Año": "#83dcfc",
-    "Tercer Año": "#83fb93",
-    "Cuarto Año": "#fde281",
-    "Quinto Año": "#b98ef0",
-  };
-  let colorActual = coloresPorAnio["Primer Año"];
-  let colorCursableActual = coloresCursablesPorAnio["Primer Año"];
 
   const initialNodes = data.map((materia) => {
-    if (materia.anio !== anioActual || materia.nivel !== nivelActual) {
+    if (
+      materia.anio !== anioAnterior ||
+      materia.cuatrimestre !== cuatrimestreAnterior
+    ) {
       x += 200;
       y = 0;
-      if (materia.anio !== anioActual) {
-        colorActual = coloresPorAnio[materia.anio];
-        colorCursableActual = coloresCursablesPorAnio[materia.anio];
-        anioActual = materia.anio;
-      }
-
-      if (materia.nivel !== nivelActual) {
-        nivelActual = materia.nivel;
-      }
+      anioAnterior = materia.anio;
+      cuatrimestreAnterior = materia.cuatrimestre;
     } else {
       y += 160;
     }
 
-    materiasCorrelativas = materia.correlativas.split("-");
-
-    materiasCorrelativas.forEach((codCorrelativa) => {
+    materia.correlativas.forEach((codCorrelativa) => {
       initialEdges.push({
         id: "e" + codCorrelativa + "-" + materia.codigo,
-        source: codCorrelativa,
+        source: codCorrelativa.toString(),
         target: materia.codigo.toString(),
         type: "straight",
         markerEnd: {
           type: MarkerType.ArrowClosed,
         },
-        style: { stroke: colorActual },
+        style: { stroke: coloresAprobadosPorAnio[materia.anio - 1] },
       });
     });
 
@@ -64,18 +56,19 @@ export function cargarMaterias() {
       position: { x: x, y: y },
       data: {
         label: materia.materia,
-        colorAprobado: colorActual,
-        colorCursable: colorCursableActual,
+        colorAprobado: coloresAprobadosPorAnio[materia.anio - 1],
+        colorCursable: coloresCursablesPorAnio[materia.anio - 1],
         estaAprobada: false,
         estaCursable: false,
-        correlativas: materiasCorrelativas,
+        correlativas: materia.correlativas,
       },
+      hidden: false,
       sourcePosition: "right",
       targetPosition: "left",
       style: {
-        background: colorActual,
+        background: coloresAprobadosPorAnio[materia.anio - 1],
+        "box-shadow": "2px 2px 5px 0px rgba(0,0,0,0.75)",
       },
-      hidden: false,
     };
   });
 

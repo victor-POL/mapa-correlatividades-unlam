@@ -176,31 +176,6 @@ const Diagrama = () => {
         value="Inicio"
       />
 
-      <input
-        type="button"
-        onClick={() => {
-          setModoEdicion(!modoEdicion);
-          setModoResaltado(false);
-        }}
-        value={
-          modoEdicion
-            ? "Cambiar a Modo visualización"
-            : "Cambiar a Modo edición"
-        }
-      />
-      <input
-        type="button"
-        onClick={() => {
-          setearNodosAristasEdicion();
-          setModoResaltado(!modoResaltado);
-          setModoEdicion(false);
-        }}
-        value={
-          modoResaltado
-            ? "Cambiar a Modo visualización"
-            : "Cambiar a Modo resaltado"
-        }
-      />
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -223,6 +198,33 @@ const Diagrama = () => {
           </ControlButton>
           <ControlButton style={{ width: "auto" }} onClick={onRestore}>
             <div>Restaurar</div>
+          </ControlButton>
+          <ControlButton
+            style={{ width: "auto" }}
+            onClick={() => {
+              setModoEdicion(!modoEdicion);
+              setModoResaltado(false);
+            }}
+          >
+            <div>
+              {modoEdicion
+                ? "Cambiar a Modo visualización"
+                : "Cambiar a Modo edición"}
+            </div>
+          </ControlButton>
+          <ControlButton
+            style={{ width: "auto" }}
+            onClick={() => {
+              setearNodosAristasEdicion();
+              setModoResaltado(!modoResaltado);
+              setModoEdicion(false);
+            }}
+          >
+            <div>
+              {modoResaltado
+                ? "Cambiar a Modo visualización"
+                : "Cambiar a Modo resaltado"}
+            </div>
           </ControlButton>
         </Controls>
       </ReactFlow>

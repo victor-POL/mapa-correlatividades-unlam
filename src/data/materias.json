@@ -156,7 +156,7 @@
     {
       "codigo": 22,
       "materia": "Redes de Computadoras",
-      "correlativas": [3,17],
+      "correlativas": [13,17],
       "anio": 2,
       "cuatrimestre": 3
     },

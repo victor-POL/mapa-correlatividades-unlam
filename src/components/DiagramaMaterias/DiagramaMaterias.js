@@ -104,15 +104,20 @@ const Diagrama = () => {
             nodo.style = { background: "#B9B9B9" };
             nodo.zIndex = 0;
           }
-        } else if (nodo.data.correlativas.includes(idMateriaAResaltar)) {
+        } else if (
+          nodo.data.correlativas.includes(Number(idMateriaAResaltar))
+        ) {
           const susCorrelativasEstanAprobadas = nodo.data.correlativas.every(
             (correlativa) =>
               nodes[correlativa].data.estaAprobada && !nodo.data.estaAprobada
           );
+          console.log(nodo);
+
           if (susCorrelativasEstanAprobadas) {
             nodo.data.estaCursable = true;
             nodo.style = { background: nodo.data.colorCursable };
             nodo.zIndex = 1;
+            console.log(nodo);
           } else if (!nodo.data.estaAprobada && nodo.data.estaCursable) {
             nodo.data.estaCursable = false;
             nodo.style = { background: "#B9B9B9" };

@@ -67,7 +67,7 @@ export function cargarMaterias() {
       targetPosition: "left",
       style: {
         background: coloresAprobadosPorAnio[materia.anio - 1],
-        "box-shadow": "2px 2px 5px 0px rgba(0,0,0,0.75)",
+        boxShadow: "2px 2px 5px 0px rgba(0,0,0,0.75)",
       },
     };
   });

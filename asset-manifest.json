@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/mapa-correlatividades-unlam/static/css/main.4b5c6fd3.css",
-    "main.js": "/mapa-correlatividades-unlam/static/js/main.149f6333.js",
+    "main.js": "/mapa-correlatividades-unlam/static/js/main.0c2f7d5b.js",
     "index.html": "/mapa-correlatividades-unlam/index.html",
     "main.4b5c6fd3.css.map": "/mapa-correlatividades-unlam/static/css/main.4b5c6fd3.css.map",
-    "main.149f6333.js.map": "/mapa-correlatividades-unlam/static/js/main.149f6333.js.map"
+    "main.0c2f7d5b.js.map": "/mapa-correlatividades-unlam/static/js/main.0c2f7d5b.js.map"
   },
   "entrypoints": [
     "static/css/main.4b5c6fd3.css",
-    "static/js/main.149f6333.js"
+    "static/js/main.0c2f7d5b.js"
   ]
 }

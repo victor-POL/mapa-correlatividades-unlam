@@ -59,7 +59,7 @@ export function cargarMaterias() {
         colorAprobado: coloresAprobadosPorAnio[materia.anio - 1],
         colorCursable: coloresCursablesPorAnio[materia.anio - 1],
         estaAprobada: false,
-        estaCursable: false,
+        estaCursable: materia.correlativas.length === 0 ? true : false,
         correlativas: materia.correlativas,
       },
       hidden: false,

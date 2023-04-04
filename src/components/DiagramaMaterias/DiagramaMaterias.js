@@ -74,7 +74,11 @@ const Diagrama = () => {
       setSeActivoModoResaltado(true);
       setNodes((listaNodos) =>
         listaNodos.map((nodo) => {
-          nodo.style = { background: "#B9B9B9" };
+          nodo.style = {
+            background: nodo.data.estaCursable
+              ? nodo.data.colorCursable
+              : "#B9B9B9",
+          };
           return nodo;
         })
       );
@@ -107,21 +111,24 @@ const Diagrama = () => {
         } else if (
           nodo.data.correlativas.includes(Number(idMateriaAResaltar))
         ) {
-          const susCorrelativasEstanAprobadas = nodo.data.correlativas.every(
-            (correlativa) =>
-              nodes[correlativa].data.estaAprobada && !nodo.data.estaAprobada
+          let susCorrelativasEstanAprobadas = nodo.data.correlativas.every(
+            (correlativa) => nodes[correlativa].data.estaAprobada
           );
-          console.log(nodo);
-
-          if (susCorrelativasEstanAprobadas) {
+          if (susCorrelativasEstanAprobadas && !nodo.data.estaAprobada) {
             nodo.data.estaCursable = true;
-            nodo.style = { background: nodo.data.colorCursable };
             nodo.zIndex = 1;
-            console.log(nodo);
-          } else if (!nodo.data.estaAprobada && nodo.data.estaCursable) {
+            nodo.style = { background: nodo.data.colorCursable };
+          } else if (susCorrelativasEstanAprobadas && nodo.data.estaAprobada) {
+            nodo.data.estaCursable = true;
+          } else if (!susCorrelativasEstanAprobadas && nodo.data.estaAprobada) {
             nodo.data.estaCursable = false;
-            nodo.style = { background: "#B9B9B9" };
+          } else if (
+            !susCorrelativasEstanAprobadas &&
+            !nodo.data.estaAprobada
+          ) {
+            nodo.data.estaCursable = false;
             nodo.zIndex = 0;
+            nodo.style = { background: "#B9B9B9" };
           }
         }
 

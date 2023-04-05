@@ -114,7 +114,22 @@ const Diagrama = () => {
           let susCorrelativasEstanAprobadas = nodo.data.correlativas.every(
             (correlativa) => nodes[correlativa].data.estaAprobada
           );
-          if (susCorrelativasEstanAprobadas && !nodo.data.estaAprobada) {
+
+          if (susCorrelativasEstanAprobadas) {
+            nodo.data.estaCursable = true;
+            if (!nodo.data.estaAprobada) {
+              nodo.style = { background: nodo.data.colorCursable };
+              nodo.zIndex = 1;
+            }
+          } else {
+            nodo.data.estaCursable = false;
+            if (!nodo.data.estaAprobada) {
+              nodo.style = { background: "#B9B9B9" };
+              nodo.zIndex = 0;
+            }
+          }
+
+          /* if (susCorrelativasEstanAprobadas && !nodo.data.estaAprobada) {
             nodo.data.estaCursable = true;
             nodo.zIndex = 1;
             nodo.style = { background: nodo.data.colorCursable };
@@ -129,7 +144,7 @@ const Diagrama = () => {
             nodo.data.estaCursable = false;
             nodo.zIndex = 0;
             nodo.style = { background: "#B9B9B9" };
-          }
+          } */
         }
 
         return nodo;

@@ -128,23 +128,6 @@ const Diagrama = () => {
               nodo.zIndex = 0;
             }
           }
-
-          /* if (susCorrelativasEstanAprobadas && !nodo.data.estaAprobada) {
-            nodo.data.estaCursable = true;
-            nodo.zIndex = 1;
-            nodo.style = { background: nodo.data.colorCursable };
-          } else if (susCorrelativasEstanAprobadas && nodo.data.estaAprobada) {
-            nodo.data.estaCursable = true;
-          } else if (!susCorrelativasEstanAprobadas && nodo.data.estaAprobada) {
-            nodo.data.estaCursable = false;
-          } else if (
-            !susCorrelativasEstanAprobadas &&
-            !nodo.data.estaAprobada
-          ) {
-            nodo.data.estaCursable = false;
-            nodo.zIndex = 0;
-            nodo.style = { background: "#B9B9B9" };
-          } */
         }
 
         return nodo;
@@ -175,20 +158,71 @@ const Diagrama = () => {
 
   //  Ocultar materia
   function ocultarMateria(idMateriaAOcultar) {
-    // Ocultar nodo
+    // Resaltar nodo
     setNodes((listaNodos) =>
-      listaNodos.map((nodo) =>
-        nodo.id === idMateriaAOcultar ? hide(true)(nodo) : nodo
-      )
+      listaNodos.map((nodo) => {
+        if (nodo.id === idMateriaAOcultar) {
+          hide(true)(nodo);
+          nodo.data.estaAprobada = !nodo.data.estaAprobada;
+          if (nodo.data.estaAprobada) {
+            nodo.style = { background: nodo.data.colorAprobado };
+            nodo.zIndex = 1;
+          } else if (nodo.data.estaCursable) {
+            nodo.style = { background: nodo.data.colorCursable };
+            nodo.zIndex = 1;
+          } else {
+            nodo.style = { background: "#B9B9B9" };
+            nodo.zIndex = 0;
+          }
+        } else if (nodo.data.correlativas.includes(Number(idMateriaAOcultar))) {
+          let susCorrelativasEstanAprobadas = nodo.data.correlativas.every(
+            (correlativa) => nodes[correlativa].data.estaAprobada
+          );
+
+          if (susCorrelativasEstanAprobadas) {
+            nodo.data.estaCursable = true;
+            if (!nodo.data.estaAprobada) {
+              nodo.style = { background: nodo.data.colorCursable };
+              nodo.zIndex = 1;
+            }
+          } else {
+            nodo.data.estaCursable = false;
+            if (!nodo.data.estaAprobada) {
+              nodo.style = { background: "#B9B9B9" };
+              nodo.zIndex = 0;
+            }
+          }
+        }
+
+        return nodo;
+      })
     );
-    // Ocultar aristas entrantes y salientes
+
+    // Resaltar aristas salientes
     setEdges((listaAristas) =>
-      listaAristas.map((aristaActual) =>
-        aristaActual.source === idMateriaAOcultar ||
-        aristaActual.target === idMateriaAOcultar
-          ? hide(true)(aristaActual)
-          : aristaActual
-      )
+      listaAristas.map((aristaActual) => {
+        if (
+          aristaActual.source === idMateriaAOcultar ||
+          aristaActual.target === idMateriaAOcultar
+        )
+          hide(true)(aristaActual);
+
+        if (nodes[Number(aristaActual.source)].data.estaAprobada) {
+          aristaActual.style = {
+            stroke: nodes[aristaActual.target].data.colorAprobado,
+          };
+          aristaActual.animated = true;
+          aristaActual.zIndex = 1;
+        } else {
+          aristaActual.style = {
+            stroke: "#B9B9B9",
+          };
+          aristaActual.animated = false;
+          aristaActual.zIndex = 0;
+        }
+
+        return aristaActual;
+      })
     );
   }
 
